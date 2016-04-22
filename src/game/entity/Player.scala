@@ -20,8 +20,7 @@ class Player(tm: TileMap) extends MapObject(tm) {
   val fallSpeed = 0.15
   val maxFallSpeed = 4.0
   val jumpStart = -4.8
-  val stropJumpSpeed = 0.3
-  var facingRight = true
+  val stopJumpSpeed = 0.3
   val maxHealth: Int = 5
   val maxFire: Int = 2500
 
@@ -53,12 +52,15 @@ class Player(tm: TileMap) extends MapObject(tm) {
   private var flinchTimer: Long = 0
 
   cutAnimationTiles(readSprites())
+  currentAction = Player.idle
+  animation.frames_=(sprites(Player.idle))
+  animation.delay = 400
 
   def update(): Unit = {
     // update position
     getNextPosition()
     checkTileMapCollision()
-    setPosition(xtemp, ytemp)
+    setPosition(xtemp.toInt, ytemp.toInt)
 
     // set animation
     if (scratching) {
@@ -174,11 +176,38 @@ class Player(tm: TileMap) extends MapObject(tm) {
       }
     }
 
-    // cannot attack while moving
+    // cannot move while attacking except in the air
+    if ((currentAction == Player.scratching || currentAction == Player.fireball) && !(jumping || falling)) {
+      dx = 0
+    }
+
+    // jumping
+    if (jumping && !falling) {
+      dx = jumpStart
+      falling = true
+    }
+
+    // falling
+    if (falling) {
+      if (dy > 0 && gliding) {
+        dy += fallSpeed * 0.1
+      } else {
+        dy += fallSpeed
+      }
+      if (dy > 0) {
+        jumping = false
+      }
+      if (dy < 0 && !jumping) {
+        dy += stopJumpSpeed
+      }
+      if (dy > maxFallSpeed) {
+        dy = maxFallSpeed
+      }
+    }
   }
 
   private def readSprites(): BufferedImage = {
-    val stream = getClass.getResourceAsStream("Sprites/Player/playersprites.gif")
+    val stream = getClass.getResourceAsStream("/Sprites/Player/playersprites.gif")
     try {
       ImageIO.read(stream)
     } catch {

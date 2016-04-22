@@ -19,7 +19,7 @@ abstract class MapObject(tm: TileMap) {
   protected var dy: Double = 0
 
   // dimensions
-  val width: Int
+  var width: Int
   val height: Int
 
   // collision box
@@ -42,7 +42,7 @@ abstract class MapObject(tm: TileMap) {
   protected val animation: Animation = new Animation
   protected var currentAction: Int = 0
   protected var previousAction: Int = 0
-  protected val facingRight: Boolean
+  protected var facingRight: Boolean = true
 
   // movement
   var left: Boolean = false
@@ -53,13 +53,13 @@ abstract class MapObject(tm: TileMap) {
   var falling: Boolean = false
 
   // movement attributes
-  protected val moveSpeed: Int
-  protected val maxSpeed: Int
-  protected val stopSpeed: Int
-  protected val fallSpeed: Int
-  protected val maxFallSpeed: Int
-  protected val jumpStart: Int
-  protected val stropJumpSpeed: Int
+  protected val moveSpeed: Double
+  protected val maxSpeed: Double
+  protected val stopSpeed: Double
+  protected val fallSpeed: Double
+  protected val maxFallSpeed: Double
+  protected val jumpStart: Double
+  protected val stopJumpSpeed: Double
 
   def intersects(o: MapObject): Boolean = {
     val r1 = getRectangle()
