@@ -183,7 +183,7 @@ class Player(tm: TileMap) extends MapObject(tm) {
 
     // jumping
     if (jumping && !falling) {
-      dx = jumpStart
+      dy = jumpStart
       falling = true
     }
 

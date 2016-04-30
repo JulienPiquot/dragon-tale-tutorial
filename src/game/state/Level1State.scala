@@ -34,6 +34,10 @@ class Level1State(manager: GameStateManager) extends GameState(manager) {
 
   override def update: Unit = {
     player.update()
+    tileMap.setPosition(
+      GamePanel.Width / 2 - player.x,
+      GamePanel.Height / 2 - player.y
+    )
   }
 
   override def keyPressed(k: Int): Unit = {

@@ -12,10 +12,10 @@ class TileMap(val tileSize: Int) {
   var x: Double = 0.0
   var y: Double = 0.0
 
-  private val xmin = 0
-  private val ymin = 0
-  private val xmax = Int.MaxValue
-  private val ymax = Int.MaxValue
+  private var xmin = 0
+  private var ymin = 0
+  private var xmax = 0
+  private var ymax = 0
 
   // map
   private val tween: Double = 0.07
@@ -91,17 +91,19 @@ class TileMap(val tileSize: Int) {
     map = Array.ofDim[Int](numRows, numCols)
     width = numCols * tileSize
     heigth = numRows * tileSize
+
+    xmin = GamePanel.Width - width
+    xmax = 0
+    ymin = GamePanel.Height - heigth
+    ymax = 0
+
     val delim = "\\s+"
-    var row = 0
-    while (row < numRows) {
+    for (row <- 0 until numRows) {
       val line = reader.readLine()
       val tokens = line.split(delim)
-      var col = 0
-      while (col < numCols) {
+      for (col <- 0 until numCols) {
         map(row)(col) = Integer.parseInt(tokens(col))
-        col = col + 1
       }
-      row = row + 1
     }
   }
 
