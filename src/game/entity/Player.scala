@@ -60,7 +60,7 @@ class Player(tm: TileMap) extends MapObject(tm) {
     // update position
     getNextPosition()
     checkTileMapCollision()
-    setPosition(xtemp.toInt, ytemp.toInt)
+    setPosition(xtemp.round.toInt, ytemp.round.toInt)
 
     // set animation
     if (scratching) {
