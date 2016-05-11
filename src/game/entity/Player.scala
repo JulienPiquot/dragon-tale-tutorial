@@ -36,7 +36,7 @@ class Player(tm: TileMap) extends MapObject(tm) {
   // player stuff
   var health: Int = maxHealth
   var fire: Int = maxFire
-  //private val fireballs: ArrayBuffer[FireBall] = new ArrayBuffer[FireBall]()
+  private val fireballs: ArrayBuffer[FireBall] = new ArrayBuffer[FireBall]()
 
   // fireball
   var firing: Boolean = false
@@ -61,6 +61,9 @@ class Player(tm: TileMap) extends MapObject(tm) {
     getNextPosition()
     checkTileMapCollision()
     setPosition(xtemp.round.toInt, ytemp.round.toInt)
+
+    if (currentAction == Player.scratching && animation.playedOnce) scratching = false
+    if (currentAction == Player.fireball && animation.playedOnce) firing = false
 
     // set animation
     if (scratching) {
@@ -117,7 +120,8 @@ class Player(tm: TileMap) extends MapObject(tm) {
 
     // set direction
     if (currentAction != Player.scratching && currentAction != Player.fireball) {
-      facingRight = right
+      if (right) facingRight = true
+      if (left) facingRight = false
     }
   }
 
@@ -226,7 +230,7 @@ class Player(tm: TileMap) extends MapObject(tm) {
         if (i != 6) {
           imageArray(j) = image.getSubimage(j * width, i * height, width, height)
         } else {
-          imageArray(j) = image.getSubimage(j * width * 2, i * height, width, height)
+          imageArray(j) = image.getSubimage(j * width * 2, i * height, width * 2, height)
         }
       }
       sprites += imageArray
