@@ -65,6 +65,18 @@ class Player(tm: TileMap) extends MapObject(tm) {
     if (currentAction == Player.scratching && animation.playedOnce) scratching = false
     if (currentAction == Player.fireball && animation.playedOnce) firing = false
 
+    // fireball attack
+    fire += 1
+    if (fire > maxFire) fire = maxFire
+    if (firing && currentAction != Player.fireball) {
+      if (fire > fireCost) {
+        fire -= fireCost
+        val fb = new FireBall(tm, facingRight)
+        fb.setPosition(x, y)
+        fireballs :+ fb
+      }
+    }
+
     // set animation
     if (scratching) {
       if (currentAction != Player.scratching) {
@@ -128,6 +140,9 @@ class Player(tm: TileMap) extends MapObject(tm) {
   def draw(g: Graphics2D) = {
     setMapPosition()
 
+    // draw fireballs
+    fireballs.foreach(fb => fb.draw(g))
+
     var draw = true
 
     // draw player
@@ -137,21 +152,22 @@ class Player(tm: TileMap) extends MapObject(tm) {
         draw = false
       }
     }
-     if (draw) {
-       if (facingRight) {
+
+    if (draw) {
+      if (facingRight) {
+      g.drawImage(animation.getImage(),
+        x + xmap - width / 2,
+        y + ymap - height / 2,
+        null)
+      } else {
         g.drawImage(animation.getImage(),
-          x + xmap - width / 2,
+          x + xmap - width / 2 + width,
           y + ymap - height / 2,
+          -width,
+          height,
           null)
-       } else {
-         g.drawImage(animation.getImage(),
-           x + xmap - width / 2 + width,
-           y + ymap - height / 2,
-           -width,
-           height,
-           null)
-       }
-     }
+        }
+    }
   }
 
   private def getNextPosition() = {

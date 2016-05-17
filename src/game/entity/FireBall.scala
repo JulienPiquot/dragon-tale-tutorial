@@ -1,5 +1,6 @@
 package game.entity
 
+import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
@@ -7,21 +8,67 @@ import game.tilemap.TileMap
 
 class FireBall(tm: TileMap, right: Boolean) extends MapObject(tm: TileMap) {
 
-  private var hit: Boolean = false
-  private var remove: Boolean = false
-  private val sprites: Array[BufferedImage] = new Array[BufferedImage](4)
-  private val hitSprites: Array[BufferedImage] = new Array[BufferedImage](3)
-
-  var width = 30
   val height = 30
   val cwidth = 14
   val cheight = 14
   val moveSpeed = 3.8
+  private val sprites: Array[BufferedImage] = new Array[BufferedImage](4)
+  private val hitSprites: Array[BufferedImage] = new Array[BufferedImage](3)
+  var width = 30
+  private var hit: Boolean = false
+  private var remove: Boolean = false
   if (right) dx = moveSpeed
   else dx = -moveSpeed
 
+  val maxSpeed: Double = 0.0
+  val stopSpeed: Double = 0.0
+  val fallSpeed: Double = 0.0
+  val maxFallSpeed: Double = 0.0
+  val jumpStart: Double = 0.0
+  val stopJumpSpeed: Double = 0.0
+
   // load sprites
   cutFireballTiles(readSprites())
+  animation.frames_=(sprites)
+  animation.delay = 70
+
+  def setHit = {
+    if (!hit) {
+      hit = true
+      animation.frames_=(hitSprites)
+      animation.delay = 70
+      dx = 0
+    }
+  }
+
+  def shoudRemove = remove
+
+  def update = {
+    checkTileMapCollision()
+    setPosition(xtemp.round.toInt, ytemp.round.toInt)
+    animation.update()
+    if (hit && animation.playedOnce) {
+      remove = true
+    }
+  }
+
+  def draw(g: Graphics2D) = {
+    setMapPosition()
+
+    if (facingRight) {
+      g.drawImage(animation.getImage(),
+        x + xmap - width / 2,
+        y + ymap - height / 2,
+        null)
+    } else {
+      g.drawImage(animation.getImage(),
+        x + xmap - width / 2 + width,
+        y + ymap - height / 2,
+        -width,
+        height,
+        null)
+    }
+  }
 
   private def cutFireballTiles(image: BufferedImage) = {
     for (i <- 0 until 4) {
