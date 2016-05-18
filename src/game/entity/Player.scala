@@ -36,7 +36,7 @@ class Player(tm: TileMap) extends MapObject(tm) {
   // player stuff
   var health: Int = maxHealth
   var fire: Int = maxFire
-  private val fireballs: ArrayBuffer[FireBall] = new ArrayBuffer[FireBall]()
+  private var fireballs: ArrayBuffer[FireBall] = new ArrayBuffer[FireBall]()
 
   // fireball
   var firing: Boolean = false
@@ -73,9 +73,13 @@ class Player(tm: TileMap) extends MapObject(tm) {
         fire -= fireCost
         val fb = new FireBall(tm, facingRight)
         fb.setPosition(x, y)
-        fireballs :+ fb
+        fireballs.append(fb)
       }
     }
+
+    fireballs.foreach(fb => fb.update)
+    fireballs = fireballs.filter(fb => !fb.shoudRemove)
+
 
     // set animation
     if (scratching) {

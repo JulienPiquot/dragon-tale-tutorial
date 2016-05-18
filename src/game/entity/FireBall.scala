@@ -46,6 +46,11 @@ class FireBall(tm: TileMap, right: Boolean) extends MapObject(tm: TileMap) {
   def update = {
     checkTileMapCollision()
     setPosition(xtemp.round.toInt, ytemp.round.toInt)
+
+    if (dx == 0 && !hit) {
+      setHit
+    }
+
     animation.update()
     if (hit && animation.playedOnce) {
       remove = true
@@ -75,7 +80,7 @@ class FireBall(tm: TileMap, right: Boolean) extends MapObject(tm: TileMap) {
       sprites(i) = image.getSubimage(i * width, 0, width, height)
     }
     for (i <- 0 until 3) {
-      sprites(i) = image.getSubimage(i * width, height, width, height)
+      hitSprites(i) = image.getSubimage(i * width, height, width, height)
     }
   }
 
