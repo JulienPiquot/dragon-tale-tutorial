@@ -4,11 +4,14 @@ import java.awt.event.KeyEvent
 import java.awt.{Color, Graphics2D}
 
 import game.GamePanel
-import game.entity.Player
+import game.entity.{Enemy, Player}
 import game.tilemap.{Tile, Background, TileMap}
+
+import scala.collection.mutable.ArrayBuffer
 
 class Level1State(manager: GameStateManager) extends GameState(manager) {
 
+  private val enemyList: ArrayBuffer[Enemy] = new ArrayBuffer[Enemy]()
   private val tileMap = new TileMap(30)
   private val background = new Background("/Backgrounds/grassbg1.gif", 0.1)
   private val player = new Player(tileMap)
@@ -38,6 +41,7 @@ class Level1State(manager: GameStateManager) extends GameState(manager) {
       GamePanel.Width / 2 - player.x,
       GamePanel.Height / 2 - player.y
     )
+    background.setPosition(tileMap.x, tileMap.y)
   }
 
   override def keyPressed(k: Int): Unit = {
