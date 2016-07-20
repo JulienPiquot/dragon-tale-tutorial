@@ -141,7 +141,7 @@ class Player(tm: TileMap) extends MapObject(tm) {
     }
   }
 
-  def draw(g: Graphics2D) = {
+  override def draw(g: Graphics2D): Unit = {
     setMapPosition()
 
     // draw fireballs
@@ -158,19 +158,7 @@ class Player(tm: TileMap) extends MapObject(tm) {
     }
 
     if (draw) {
-      if (facingRight) {
-      g.drawImage(animation.getImage(),
-        x + xmap - width / 2,
-        y + ymap - height / 2,
-        null)
-      } else {
-        g.drawImage(animation.getImage(),
-          x + xmap - width / 2 + width,
-          y + ymap - height / 2,
-          -width,
-          height,
-          null)
-        }
+      super.draw(g)
     }
   }
 

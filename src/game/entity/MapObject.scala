@@ -1,6 +1,6 @@
 package game.entity
 
-import java.awt.Rectangle
+import java.awt.{Graphics2D, Rectangle}
 
 import game.GamePanel
 import game.tilemap.{Tile, TileMap}
@@ -159,5 +159,22 @@ abstract class MapObject(tm: TileMap) {
 
   def notOnScreen() = {
     x + xmap + width < 0 || x + xmap - width > GamePanel.Width || y + ymap + height < 0 || y + ymap - height > GamePanel.Height
+  }
+
+  def draw(g: Graphics2D): Unit = {
+    if (facingRight) {
+      // xmap and ymap are already negative, don't need to substract to get the relative position of the player
+      g.drawImage(animation.getImage(),
+        x + xmap - width / 2,
+        y + ymap - height / 2,
+        null)
+    } else {
+      g.drawImage(animation.getImage(),
+        x + xmap - width / 2 + width,
+        y + ymap - height / 2,
+        -width,
+        height,
+        null)
+    }
   }
 }

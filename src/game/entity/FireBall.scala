@@ -8,6 +8,7 @@ import game.tilemap.TileMap
 
 class FireBall(tm: TileMap, right: Boolean) extends MapObject(tm: TileMap) {
 
+  facingRight = right
   val height = 30
   val cwidth = 14
   val cheight = 14
@@ -57,22 +58,9 @@ class FireBall(tm: TileMap, right: Boolean) extends MapObject(tm: TileMap) {
     }
   }
 
-  def draw(g: Graphics2D) = {
+  override def draw(g: Graphics2D): Unit = {
     setMapPosition()
-
-    if (facingRight) {
-      g.drawImage(animation.getImage(),
-        x + xmap - width / 2,
-        y + ymap - height / 2,
-        null)
-    } else {
-      g.drawImage(animation.getImage(),
-        x + xmap - width / 2 + width,
-        y + ymap - height / 2,
-        -width,
-        height,
-        null)
-    }
+    super.draw(g)
   }
 
   private def cutFireballTiles(image: BufferedImage) = {
