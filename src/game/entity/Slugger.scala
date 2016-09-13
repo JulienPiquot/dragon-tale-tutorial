@@ -20,6 +20,7 @@ class Slugger(tm: TileMap) extends Enemy(tm) {
   override val height: Int = 30
 
   health = 2
+  right = true
   override val damage: Int = 1
   override protected val maxHealth: Int = 2
 
@@ -45,15 +46,46 @@ class Slugger(tm: TileMap) extends Enemy(tm) {
   }
 
   private def getNextPosition() {
+    // movement
+    if (left) {
+      dx -= moveSpeed
+      if (dx < -maxSpeed) {
+        dx = -maxSpeed
+      }
+    } else if (right) {
+      dx += moveSpeed
+      if (dx > maxSpeed) {
+        dx = maxSpeed
+      }
+    }
 
+    if (falling) {
+      dy += fallSpeed
+    }
   }
 
-  private def update() {
+  override def update() {
     // update position
     getNextPosition()
     checkTileMapCollision()
-    setPosition(xtemp.round.toInt, ytemp.round.toInt)
+    setPosition(xtemp.ceil.toInt, ytemp.ceil.toInt)
 
+    // check flinching
+    if (flinching) {
+      val elapsed = (System.nanoTime() - flinchTimer) / 1000000
+      if (elapsed > 400) {
+        flinching = false
+      }
+    }
+
+    // if it hits a wall, go other direction
+    if (right && dx == 0) {
+      right = false
+      left = true
+    } else if (left && dx == 0) {
+      right = true
+      left = false
+    }
   }
 
   override def draw(g: Graphics2D): Unit = {

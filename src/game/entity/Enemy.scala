@@ -21,4 +21,6 @@ abstract class Enemy(tm: TileMap) extends MapObject(tm) {
       flinchTimer = System.nanoTime()
     }
   }
+
+  def update()
 }

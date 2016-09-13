@@ -142,6 +142,7 @@ abstract class MapObject(tm: TileMap) {
     new Rectangle(x - cwidth, y - cheight, cwidth, cheight)
   }
 
+  // use double instead of int in order to have a better precision
   def setPosition(x: Int, y: Int) = {
     this.x = x
     this.y = y
