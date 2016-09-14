@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent
 import java.awt.{Color, Graphics2D}
 
 import game.GamePanel
-import game.entity.{Slugger, Enemy, Player}
+import game.entity.{HUD, Slugger, Enemy, Player}
 import game.tilemap.{Tile, Background, TileMap}
 
 import scala.collection.mutable.ArrayBuffer
@@ -15,6 +15,7 @@ class Level1State(manager: GameStateManager) extends GameState(manager) {
   private val tileMap = new TileMap(30)
   private val background = new Background("/Backgrounds/grassbg1.gif", 0.1)
   private val player = new Player(tileMap)
+  private val hud: HUD = new HUD(player)
   player.setPosition(100, 100)
   val s = new Slugger(tileMap)
   s.setPosition(100, 100)
@@ -64,6 +65,7 @@ class Level1State(manager: GameStateManager) extends GameState(manager) {
     tileMap.draw(g)
     player.draw(g)
     enemyList.foreach(e => e.draw(g))
+    hud.draw(g)
   }
 
   override def keyReleased(k: Int): Unit = {

@@ -28,6 +28,7 @@ class Slugger(tm: TileMap) extends Enemy(tm) {
   animation.frames_=(sprites)
   animation.delay_=(300)
   right = true
+  facingRight = true
 
   private def cutAnimationTiles(image: BufferedImage): Array[BufferedImage] = {
     for (i <- Array(0, 1, 2)) yield image.getSubimage(i * width, 0, width, height)
@@ -68,7 +69,7 @@ class Slugger(tm: TileMap) extends Enemy(tm) {
     // update position
     getNextPosition()
     checkTileMapCollision()
-    setPosition(xtemp.ceil.toInt, ytemp.ceil.toInt)
+    setPosition(xtemp, ytemp)
 
     // check flinching
     if (flinching) {
@@ -82,10 +83,15 @@ class Slugger(tm: TileMap) extends Enemy(tm) {
     if (right && dx == 0) {
       right = false
       left = true
+      facingRight = false
     } else if (left && dx == 0) {
       right = true
       left = false
+      facingRight = true
     }
+
+    // update animation
+    animation.update()
   }
 
   override def draw(g: Graphics2D): Unit = {

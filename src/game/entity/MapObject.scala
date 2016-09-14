@@ -9,12 +9,14 @@ abstract class MapObject(tm: TileMap) {
 
   // tile stuff
   protected val tileSize: Int = tm.tileSize
-  protected var xmap: Int = 0
-  protected var ymap: Int = 0
+
+  // position of the map relative to the start
+  protected var xmap: Double = 0
+  protected var ymap: Double = 0
 
   // position and vector
-  var x: Int = 0
-  var y: Int = 0
+  var x: Double = 0
+  var y: Double = 0
   protected var dx: Double = 0
   protected var dy: Double = 0
 
@@ -57,8 +59,8 @@ abstract class MapObject(tm: TileMap) {
   }
 
   def checkTileMapCollision(): Unit = {
-    currentCol = x / tileSize
-    currentRow = y / tileSize
+    currentCol = x.round.toInt / tileSize
+    currentRow = y.round.toInt / tileSize
 
     val xdest = x + dx
     val ydest = y + dy
@@ -139,11 +141,11 @@ abstract class MapObject(tm: TileMap) {
   }
 
   private def getRectangle(): Rectangle = {
-    new Rectangle(x - cwidth, y - cheight, cwidth, cheight)
+    new Rectangle(x.round.toInt - cwidth, y.round.toInt - cheight, cwidth, cheight)
   }
 
   // use double instead of int in order to have a better precision
-  def setPosition(x: Int, y: Int) = {
+  def setPosition(x: Double, y: Double) = {
     this.x = x
     this.y = y
   }
@@ -166,13 +168,13 @@ abstract class MapObject(tm: TileMap) {
     if (facingRight) {
       // xmap and ymap are already negative, don't need to substract to get the relative position of the player
       g.drawImage(animation.getImage(),
-        x + xmap - width / 2,
-        y + ymap - height / 2,
+        (x + xmap - width / 2).round.toInt,
+        (y + ymap - height / 2).round.toInt,
         null)
     } else {
       g.drawImage(animation.getImage(),
-        x + xmap - width / 2 + width,
-        y + ymap - height / 2,
+        (x + xmap - width / 2 + width).round.toInt,
+        (y + ymap - height / 2).round.toInt,
         -width,
         height,
         null)
